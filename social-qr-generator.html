@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media QR Code Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .qr-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Social Media QR Code Generator</h1>
+    <form id="detailsForm">
+        <input type="text" id="phone" placeholder="Enter your phone number" required><br>
+        <input type="text" id="instagram" placeholder="Enter your Instagram ID" required><br>
+        <input type="text" id="facebook" placeholder="Enter your Facebook profile" required><br>
+        <input type="text" id="twitter" placeholder="Enter your Twitter handle" required><br>
+        <input type="text" id="linkedin" placeholder="Enter your LinkedIn profile" required><br>
+        <button type="button" onclick="generateQRCode()">Generate QR Code</button>
+    </form>
+
+    <div class="qr-container" id="qrContainer"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+<script>
+    function generateQRCode() {
+        // Get user input values
+        const phone = encodeURIComponent(document.getElementById('phone').value);
+        const instagram = encodeURIComponent(document.getElementById('instagram').value);
+        const facebook = encodeURIComponent(document.getElementById('facebook').value);
+        const twitter = encodeURIComponent(document.getElementById('twitter').value);
+        const linkedin = encodeURIComponent(document.getElementById('linkedin').value);
+
+        // Validate if all fields are filled
+        if (!phone || !instagram || !facebook || !twitter || !linkedin) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // Create the URL with query parameters
+        // Use a real URL where you want the contact details to be stored, e.g., Linktree or your own landing page
+        const content = `https://linktr.ee/yourusername?phone=${phone}&instagram=${instagram}&facebook=${facebook}&twitter=${twitter}&linkedin=${linkedin}`;
+
+        // Clear previous QR code if any
+        document.getElementById('qrContainer').innerHTML = '';
+
+        // Generate the QR code and display it on the page
+        try {
+            QRCode.toDataURL(content, { errorCorrectionLevel: 'L' }, function (err, url) {
+                if (err) {
+                    console.error(err);
+                    alert("Error generating QR Code");
+                } else {
+                    // Display the generated QR code image
+                    const qrImage = document.createElement('img');
+                    qrImage.src = url;
+                    document.getElementById('qrContainer').appendChild(qrImage);
+                    console.log("QR Code generated!");
+                }
+            });
+        } catch (error) {
+            console.error("QR Code generation failed:", error);
+            alert("Error generating QR Code");
+        }
+    }
+</script>
+
+</body>
+</html>
